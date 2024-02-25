@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="saasdemo-user" />
+        <module name="saasdemo-master" />
+        <module name="saasdemo-core" />
+        <module name="saasdemo-order" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="saasdemo-naster" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="saasdemo-core" options="-parameters" />
+      <module name="saasdemo-master" options="-parameters" />
+      <module name="saasdemo-naster" options="-parameters" />
+      <module name="saasdemo-order" options="-parameters" />
+      <module name="saasdemo-user" options="-parameters" />
+    </option>
+  </component>
+</project>
