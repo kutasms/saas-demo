@@ -1,17 +1,13 @@
 package org.example.saas.order.controller;
 
 
+import org.example.saas.core.domain.dto.OrderPlaceResultDTO;
+import org.example.saas.core.parameter.order.*;
+import org.example.saas.core.service.order.strategy.OrderPlaceStrategy;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.example.saas.core.service.order.TradeService;
 import org.example.saas.core.domain.dto.TradeDTO;
 import org.example.saas.core.pojo.Trade;
-import org.example.saas.core.parameter.order.TradeDetailGetParameter;
-import org.example.saas.core.parameter.order.TradePageGetParameter;
-import org.example.saas.core.parameter.order.TradeDeleteParameter;
-import org.example.saas.core.parameter.order.TradeSaveParameter;
-import org.example.saas.core.parameter.order.TradeUpdateParameter;
-import org.example.saas.core.parameter.order.TradeEnableParameter;
-import org.example.saas.core.parameter.order.TradeDisableParameter;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +32,8 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = "交易")
 public class TradeController {
     private final TradeService tradeService;
+
+    private final OrderPlaceStrategy placeStrategy;
 
     @PostMapping("/detail")
     @ApiOperation("获取交易详情")
@@ -89,6 +87,14 @@ public class TradeController {
     public Result<Boolean> delete(@Validated @RequestBody TradeDeleteParameter parameter) {
         tradeService.delete(parameter);
         return new Result<>(true);
+    }
+
+    @PostMapping("/place-order")
+    @ApiOperation("下单")
+    @WebLog
+    public Result<OrderPlaceResultDTO> placeOrder(@Validated @RequestBody OrderPlaceParameter parameter) {
+        OrderPlaceResultDTO dto = placeStrategy.placeOrder(parameter);
+        return new Result<>(dto);
     }
 
 }

@@ -1,6 +1,8 @@
 package org.example.saas.core.parameter.user;
 
 import lombok.Data;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -18,7 +20,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @ApiModel(value = "CustomerDetailGetParameter",description = "客户详情获取请求")
-public class CustomerDetailGetParameter {
+public class CustomerDetailGetParameter implements Serializable {
     /**
      * 客户编号
      */

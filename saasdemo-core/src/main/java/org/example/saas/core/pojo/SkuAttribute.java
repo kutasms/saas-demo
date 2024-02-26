@@ -1,47 +1,46 @@
 package org.example.saas.core.pojo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 订单项属性
+ * 商品规格属性
  * </p>
  *
  * @author Multi Tenant Auto Generator
- * @since 2024-02-26
+ * @since 2024-02-17
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("saas_order_item_attr")
-@ApiModel(value="OrderItemAttr对象", description="订单项属性")
-public class OrderItemAttr implements Serializable {
+@TableName("ks_sku_attribute")
+@ApiModel(value="SkuAttribute对象", description="商品规格属性")
+public class SkuAttribute implements Serializable {
 
 
     /**
-     * 订单项属性编号
+     * 规格属性编号
      */
-    @ApiModelProperty(value = "订单项属性编号")
-    @TableId(value = "attr_id", type = IdType.INPUT)
+    @ApiModelProperty(value = "规格属性编号")
+    @TableId(value = "attr_id", type = IdType.AUTO)
     private Long attrId;
 
     /**
-     * 订单项编号
+     * 规格编号
      */
-    @ApiModelProperty(value = "订单项编号")
-    @TableField("`item_id`")
-    private Long itemId;
+    @ApiModelProperty(value = "规格编号")
+    @TableField("`sku_id`")
+    private Long skuId;
 
     /**
      * 租户编号
@@ -79,11 +78,18 @@ public class OrderItemAttr implements Serializable {
     private String codeValue;
 
     /**
-     * 创建时间
+     * 规格图片
      */
-    @ApiModelProperty(value = "创建时间")
-    @TableField(value = "`create_time`", fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    @ApiModelProperty(value = "规格图片")
+    @TableField("`image`")
+    private String image;
+
+    /**
+     * 排序索引
+     */
+    @ApiModelProperty(value = "排序索引")
+    @TableField("`index`")
+    private Byte index;
 
 
 }

@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author Multi Tenant Auto Generator
- * @since 2024-02-25
+ * @since 2024-02-26
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
