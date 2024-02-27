@@ -101,10 +101,10 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
                 .setReceived(false);
         orderDetailService.saveTE(orderDetail);
         order.setDetail(orderDetail);
-//        dubboUserService.increaseGrowth(new CustomerGrowthIncreaseParameter()
-//                .setCustomerId(trade.getCustomerId())
-//                .setTenantId(trade.getTenantId())
-//                .setGrowth(5));
+        dubboUserService.increaseGrowth(new CustomerGrowthIncreaseParameter()
+                .setCustomerId(trade.getCustomerId())
+                .setTenantId(trade.getTenantId())
+                .setGrowth(5));
         // 保存订单子项
         saveOrderItems(parameter, trade, order, products);
         // 修改交易金额

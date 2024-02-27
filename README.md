@@ -36,6 +36,8 @@ Multienty集成了多个优秀的中间件，为您提供一站式多租户SAAS�
 
 [SaaS平台开发实战(六)：模拟客户下订单](https://zhuanlan.zhihu.com/p/684010126)
 
+[SaaS平台开发实战(七)：链表查询和分布式事务](https://zhuanlan.zhihu.com/p/684278490)
+
 
 ## 更多特性
 如您想了解更多特性，可咨询本项目作者或自行阅读源代码
