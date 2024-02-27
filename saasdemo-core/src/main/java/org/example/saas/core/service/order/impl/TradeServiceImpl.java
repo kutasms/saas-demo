@@ -1,8 +1,10 @@
 package org.example.saas.core.service.order.impl;
 
+import com.chia.multienty.core.util.TimeUtil;
 import org.checkerframework.checker.units.qual.C;
 import org.example.saas.core.pojo.Trade;
 import org.example.saas.core.mapper.TradeMapper;
+import org.example.saas.core.service.order.OrderService;
 import org.example.saas.core.service.order.TradeService;
 import com.chia.multienty.core.mybatis.service.impl.KutaBaseServiceImpl;
 import org.springframework.stereotype.Service;
@@ -39,14 +41,24 @@ import com.chia.multienty.core.tools.IdWorkerProvider;
 @DS(MultiTenantConstants.DS_SHARDING)
 public class TradeServiceImpl extends KutaBaseServiceImpl<TradeMapper, Trade> implements TradeService {
 
-
+    private final OrderService orderService;
     @Override
     public TradeDTO getDetail(TradeDetailGetParameter parameter) {
-        return selectJoinOne(TradeDTO.class,
-                        MPJWrappers.<Trade>lambdaJoin()
+        TradeDTO trade = selectJoinOne(TradeDTO.class,
+                MPJWrappers.<Trade>lambdaJoin()
                         .eq(Trade::getTenantId, parameter.getTenantId())
-                        .eq(Trade::getCreateTime, parameter.getCreateTime())
+                        .ge(Trade::getCreateTime, TimeUtil.minTime(parameter.getCreateTime().toLocalDate()))
+                        .le(Trade::getCreateTime, TimeUtil.maxTime(parameter.getCreateTime().toLocalDate()))
                         .eq(Trade::getTradeId, parameter.getTradeId()));
+        if(parameter.getContainsOrders()) {
+            trade.setOrders(orderService.getList(
+                    parameter.getTradeId(),
+                    parameter.getTenantId(),
+                    parameter.getCreateTime(),
+                    parameter.getContainsOrderDetail(),
+                    parameter.getContainsOrderItems()));
+        }
+        return trade;
     }
 
     @Override

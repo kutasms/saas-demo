@@ -1,5 +1,7 @@
 package org.example.saas.core.service.user.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import org.example.saas.core.parameter.user.*;
 import org.example.saas.core.pojo.Customer;
 import org.example.saas.core.mapper.CustomerMapper;
 import org.example.saas.core.service.user.CustomerService;
@@ -7,13 +9,6 @@ import com.chia.multienty.core.mybatis.service.impl.KutaBaseServiceImpl;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.example.saas.core.domain.dto.CustomerDTO;
-import org.example.saas.core.parameter.user.CustomerDetailGetParameter;
-import org.example.saas.core.parameter.user.CustomerPageGetParameter;
-import org.example.saas.core.parameter.user.CustomerDeleteParameter;
-import org.example.saas.core.parameter.user.CustomerSaveParameter;
-import org.example.saas.core.parameter.user.CustomerUpdateParameter;
-import org.example.saas.core.parameter.user.CustomerEnableParameter;
-import org.example.saas.core.parameter.user.CustomerDisableParameter;
 import com.github.yulichang.toolkit.MPJWrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +20,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chia.multienty.core.tools.MultiTenantContext;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.chia.multienty.core.tools.IdWorkerProvider;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * <p>
  * 客户 服务实现类
@@ -45,6 +43,22 @@ public class CustomerServiceImpl extends KutaBaseServiceImpl<CustomerMapper, Cus
                         MPJWrappers.<Customer>lambdaJoin()
                         .eq(Customer::getTenantId, parameter.getTenantId())
                         .eq(Customer::getCustomerId, parameter.getCustomerId()));
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void increaseGrowth(CustomerGrowthIncreaseParameter parameter) {
+        Customer entity = getDetail(new CustomerDetailGetParameter()
+                .setCustomerId(parameter.getCustomerId())
+                .setTenantId(parameter.getTenantId()));
+        int growth = (entity == null || entity.getGrowth() == null)
+                ? parameter.getGrowth()
+                : entity.getGrowth() + parameter.getGrowth();
+        update(new LambdaUpdateWrapper<Customer>()
+                .set(Customer::getGrowth, growth)
+                .eq(Customer::getTenantId, parameter.getTenantId())
+                .eq(Customer::getCustomerId, parameter.getCustomerId()));
+        throw new RuntimeException();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.example.saas.core.service.order.impl;
 
+import com.chia.multienty.core.util.TimeUtil;
 import org.example.saas.core.pojo.OrderItem;
 import org.example.saas.core.mapper.OrderItemMapper;
 import org.example.saas.core.service.order.OrderItemService;
@@ -18,11 +19,14 @@ import org.springframework.beans.BeanUtils;
 import com.chia.multienty.core.domain.constants.MultiTenantConstants;
 import com.chia.multienty.core.mybatis.MTLambdaWrapper;
 import com.chia.multienty.core.util.ListUtil;
-import com.chia.multienty.core.domain.enums.StatusEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chia.multienty.core.tools.MultiTenantContext;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.chia.multienty.core.tools.IdWorkerProvider;
+
+import java.time.LocalDate;
+import java.util.List;
+
 /**
  * <p>
  * 订单项 服务实现类
@@ -54,6 +58,16 @@ public class OrderItemServiceImpl extends KutaBaseServiceImpl<OrderItemMapper, O
                 .eq(OrderItem::getTenantId, parameter.getTenantId())
                 .eq(OrderItem::getCreateTime, parameter.getCreateTime())
                 .eq(OrderItem::getItemId, parameter.getItemId()));
+    }
+
+    @Override
+    public List<OrderItemDTO> getList(Long tenantId, LocalDate date, List<Long> orderIds) {
+        return selectJoinList(OrderItemDTO.class, mtLambdaWrapper()
+                .in(OrderItem::getOrderId, orderIds)
+                .eq(OrderItem::getTenantId, tenantId)
+                .ge(OrderItem::getCreateTime, TimeUtil.minTime(date))
+                .le(OrderItem::getCreateTime, TimeUtil.maxTime(date))
+        );
     }
 
     @Override

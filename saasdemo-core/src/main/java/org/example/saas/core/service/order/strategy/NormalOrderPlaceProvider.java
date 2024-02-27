@@ -8,15 +8,21 @@ import org.example.saas.core.domain.dto.OrderDTO;
 import org.example.saas.core.domain.dto.ProductDTO;
 import org.example.saas.core.domain.dto.ProductSkuDTO;
 import org.example.saas.core.domain.enums.OrderType;
+import org.example.saas.core.dubbo.service.DubboUserService;
 import org.example.saas.core.parameter.order.OrderPlaceParameter;
 import org.example.saas.core.parameter.order.TradeUpdateParameter;
+import org.example.saas.core.parameter.user.CustomerGrowthIncreaseParameter;
 import org.example.saas.core.pojo.*;
 import org.example.saas.core.service.order.OrderDetailService;
 import org.example.saas.core.service.order.OrderItemAttrService;
 import org.example.saas.core.service.order.OrderItemService;
 import org.example.saas.core.tools.CustomerContext;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -32,8 +38,23 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
     private OrderItemService orderItemService;
     @Autowired
     private OrderItemAttrService orderItemAttrService;
+
+    @Autowired(required = false)
+    private DubboUserService dubboUserService;
+
+    @Autowired
+    @Lazy
+    private NormalOrderPlaceProvider currentProvider;
+
     @Override
+    protected AbstractOrderPlaceProvider getCurrentProxy() {
+        return currentProvider;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     protected List<OrderDTO> createOrders(OrderPlaceParameter parameter, Trade trade) {
+
         List<OrderDTO> orders = new ArrayList<>();
 
         BigDecimal total = BigDecimal.ZERO;
@@ -80,7 +101,10 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
                 .setReceived(false);
         orderDetailService.saveTE(orderDetail);
         order.setDetail(orderDetail);
-
+//        dubboUserService.increaseGrowth(new CustomerGrowthIncreaseParameter()
+//                .setCustomerId(trade.getCustomerId())
+//                .setTenantId(trade.getTenantId())
+//                .setGrowth(5));
         // 保存订单子项
         saveOrderItems(parameter, trade, order, products);
         // 修改交易金额
@@ -134,7 +158,7 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
     }
 
 
-    private List<ProductDTO> mockProducts() {
+    public List<ProductDTO> mockProducts() {
         List<ProductDTO> products = new ArrayList<>();
         ProductDTO product1 = new ProductDTO();
         product1.setBrief("商品1");
@@ -156,10 +180,10 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
         return products;
     }
 
-    private List<ProductSkuDTO> mockSkus(Long productId) {
+    public List<ProductSkuDTO> mockSkus(Long productId) {
         List<ProductSkuDTO> skus = new ArrayList<>();
+        ProductSkuDTO sku = new ProductSkuDTO();
         if(productId.equals(123L)) {
-            ProductSkuDTO sku = new ProductSkuDTO();
             sku.setSkuId(1L);
             sku.setAttributes(mockSkuAttr(sku.getSkuId()));
             sku.setDeleted(false);
@@ -174,9 +198,7 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
             sku.setTenantId(MultiTenantContext.getTenant().getTenantId());
             sku.setImageUrl("https://image.baidu.com?t=281643");
             sku.setVersion(1L);
-            skus.add(sku);
         } else {
-            ProductSkuDTO sku = new ProductSkuDTO();
             sku.setSkuId(2L);
             sku.setAttributes(mockSkuAttr(sku.getSkuId()));
             sku.setDeleted(false);
@@ -191,12 +213,12 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
             sku.setTenantId(MultiTenantContext.getTenant().getTenantId());
             sku.setImageUrl("https://image.baidu.com?t=153917B2382");
             sku.setVersion(2L);
-            skus.add(sku);
         }
+        skus.add(sku);
         return skus;
     }
 
-    private List<SkuAttribute> mockSkuAttr(Long skuId) {
+    public List<SkuAttribute> mockSkuAttr(Long skuId) {
         List<SkuAttribute> attributes = new ArrayList<>();
         if(skuId.equals(1L)) {
             SkuAttribute attribute = new SkuAttribute();

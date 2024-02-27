@@ -6,6 +6,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.example.saas.core.domain.dto.CustomerDTO;
 import org.example.saas.core.dubbo.service.DubboUserService;
 import org.example.saas.core.parameter.user.CustomerDetailGetParameter;
+import org.example.saas.core.parameter.user.CustomerGrowthIncreaseParameter;
 import org.example.saas.core.service.user.CustomerService;
 
 @DubboService
@@ -17,6 +18,11 @@ public class DubboUserServiceImpl implements DubboUserService {
     @Override
     public CustomerDTO getCustomer(CustomerDetailGetParameter parameter) {
         return customerService.getDetail(parameter);
+    }
+
+    @Override
+    public void increaseGrowth(CustomerGrowthIncreaseParameter parameter) {
+        customerService.increaseGrowth(parameter);
     }
 
 }

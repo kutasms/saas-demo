@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
+
 /**
  * <p>
  * 交易 DTO对象
@@ -17,4 +20,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value="TradeDTO", description="交易DTO对象")
 public class TradeDTO extends Trade {
+    /**
+     * 订单列表
+     */
+    @ApiModelProperty("订单列表")
+    private List<OrderDTO> orders;
 }

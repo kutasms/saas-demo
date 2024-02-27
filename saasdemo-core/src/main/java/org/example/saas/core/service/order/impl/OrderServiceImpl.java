@@ -1,7 +1,12 @@
 package org.example.saas.core.service.order.impl;
 
+import com.chia.multienty.core.mybatis.MTJoinWrappers;
+import com.chia.multienty.core.util.TimeUtil;
+import org.example.saas.core.domain.dto.OrderItemDTO;
 import org.example.saas.core.pojo.Order;
 import org.example.saas.core.mapper.OrderMapper;
+import org.example.saas.core.pojo.OrderDetail;
+import org.example.saas.core.service.order.OrderItemService;
 import org.example.saas.core.service.order.OrderService;
 import com.chia.multienty.core.mybatis.service.impl.KutaBaseServiceImpl;
 import org.springframework.stereotype.Service;
@@ -25,6 +30,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.chia.multienty.core.tools.MultiTenantContext;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.chia.multienty.core.tools.IdWorkerProvider;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * <p>
  * 订单 服务实现类
@@ -37,7 +47,7 @@ import com.chia.multienty.core.tools.IdWorkerProvider;
 @RequiredArgsConstructor
 @DS(MultiTenantConstants.DS_SHARDING)
 public class OrderServiceImpl extends KutaBaseServiceImpl<OrderMapper, Order> implements OrderService {
-
+    private final OrderItemService orderItemService;
 
     @Override
     public OrderDTO getDetail(OrderDetailGetParameter parameter) {
@@ -46,6 +56,37 @@ public class OrderServiceImpl extends KutaBaseServiceImpl<OrderMapper, Order> im
                         .eq(Order::getTenantId, parameter.getTenantId())
                         .eq(Order::getCreateTime, parameter.getCreateTime())
                         .eq(Order::getOrderId, parameter.getOrderId()));
+    }
+
+    @Override
+    public List<OrderDTO> getList(Long tradeId, Long tenantId, LocalDateTime createTime,
+                                  Boolean containsDetail, Boolean containsItems) {
+        List<OrderDTO> list = null;
+        if(containsDetail) {
+            list = selectJoinList(OrderDTO.class, MTJoinWrappers.lambda(Order.class)
+                    .selectAll(Order.class)
+                    .selectAssociation(OrderDetail.class, OrderDTO::getDetail)
+                    .leftJoin(OrderDetail.class, OrderDetail::getOrderId, Order::getOrderId)
+                    .eq(Order::getTenantId, tenantId)
+                    .eq(Order::getTradeId, tradeId)
+                    .ge(Order::getCreateTime, TimeUtil.minTime(createTime.toLocalDate()))
+                    .le(Order::getCreateTime, TimeUtil.maxTime(createTime.toLocalDate()))
+            );
+        } else {
+            list = selectJoinList(OrderDTO.class, MTJoinWrappers.lambda(Order.class)
+                    .eq(Order::getTenantId, tenantId)
+                    .eq(Order::getTradeId, tradeId)
+                    .ge(Order::getCreateTime, TimeUtil.minTime(createTime.toLocalDate()))
+                    .le(Order::getCreateTime, TimeUtil.maxTime(createTime.toLocalDate())));
+        }
+        if(containsItems && list.size() > 0) {
+            List<OrderItemDTO> itemList = orderItemService.getList(tenantId, createTime.toLocalDate(),
+                    list.stream().map(m -> m.getOrderId()).collect(Collectors.toList()));
+            for (OrderDTO order : list) {
+                order.setItems(itemList.stream().filter(p->p.getOrderId().equals(order)).collect(Collectors.toList()));
+            }
+        }
+        return list;
     }
 
     @Override

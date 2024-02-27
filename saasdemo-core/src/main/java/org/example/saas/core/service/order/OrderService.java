@@ -11,6 +11,10 @@ import org.example.saas.core.parameter.order.OrderEnableParameter;
 import org.example.saas.core.parameter.order.OrderDisableParameter;
 import org.example.saas.core.parameter.order.OrderSaveParameter;
 import org.example.saas.core.parameter.order.OrderUpdateParameter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * <p>
  * 订单 服务类
@@ -31,6 +35,9 @@ public interface OrderService extends KutaBaseService<Order> {
     void disable(OrderDisableParameter parameter);
 
     void save(OrderSaveParameter parameter);
+
+    List<OrderDTO> getList(Long tradeId, Long tenantId, LocalDateTime createTime,
+                           Boolean containsDetail, Boolean containsItems);
 
     void update(OrderUpdateParameter parameter);
 

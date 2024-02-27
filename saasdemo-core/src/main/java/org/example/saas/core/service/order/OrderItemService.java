@@ -9,6 +9,10 @@ import org.example.saas.core.parameter.order.OrderItemPageGetParameter;
 import org.example.saas.core.parameter.order.OrderItemDeleteParameter;
 import org.example.saas.core.parameter.order.OrderItemSaveParameter;
 import org.example.saas.core.parameter.order.OrderItemUpdateParameter;
+
+import java.time.LocalDate;
+import java.util.List;
+
 /**
  * <p>
  * 订单项 服务类
@@ -20,6 +24,8 @@ import org.example.saas.core.parameter.order.OrderItemUpdateParameter;
 public interface OrderItemService extends KutaBaseService<OrderItem> {
 
     OrderItemDTO getDetail(OrderItemDetailGetParameter parameter);
+
+    List<OrderItemDTO> getList(Long tenantId, LocalDate date, List<Long> orderIds);
 
     void delete(OrderItemDeleteParameter parameter);
 

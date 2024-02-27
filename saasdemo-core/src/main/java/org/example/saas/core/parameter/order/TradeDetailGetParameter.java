@@ -37,4 +37,19 @@ public class TradeDetailGetParameter {
     @ApiModelProperty(value = "创建时间")
     @NotNull
     private LocalDateTime createTime;
+
+    /**
+     * 是否包含订单列表
+     */
+    @ApiModelProperty(value = "是否包含订单列表")
+    private Boolean containsOrders;
+
+    /**
+     * 是否包含订单详情
+     */
+    private Boolean containsOrderDetail = true;
+    /**
+     * 是否包含订单项
+     */
+    private Boolean containsOrderItems = true;
 }
