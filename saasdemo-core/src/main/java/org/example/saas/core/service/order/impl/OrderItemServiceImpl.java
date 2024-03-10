@@ -16,11 +16,11 @@ import org.example.saas.core.parameter.order.OrderItemUpdateParameter;
 import com.github.yulichang.toolkit.MPJWrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import com.chia.multienty.core.domain.constants.MultiTenantConstants;
+import com.chia.multienty.core.domain.constants.MultientyConstants;
 import com.chia.multienty.core.mybatis.MTLambdaWrapper;
 import com.chia.multienty.core.util.ListUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.chia.multienty.core.tools.MultiTenantContext;
+import com.chia.multienty.core.tools.MultientyContext;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.chia.multienty.core.tools.IdWorkerProvider;
 
@@ -37,7 +37,7 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-@DS(MultiTenantConstants.DS_SHARDING)
+@DS(MultientyConstants.DS_SHARDING)
 public class OrderItemServiceImpl extends KutaBaseServiceImpl<OrderItemMapper, OrderItem> implements OrderItemService {
 
 
@@ -96,7 +96,7 @@ public class OrderItemServiceImpl extends KutaBaseServiceImpl<OrderItemMapper, O
         BeanUtils.copyProperties(parameter, orderItem);
         orderItem.setItemId(IdWorkerProvider.next());
         saveTE(orderItem);
-        orderItem.setTenantId(MultiTenantContext.getTenant().getTenantId());
+        orderItem.setTenantId(MultientyContext.getTenant().getTenantId());
         parameter.setItemId(orderItem.getItemId());
     }
 

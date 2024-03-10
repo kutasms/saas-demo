@@ -1,7 +1,7 @@
 package org.example.saas.core.config;
 
 
-import com.chia.multienty.core.tools.MultiTenantServiceLoader;
+import com.chia.multienty.core.tools.MultientyServiceLoader;
 import org.example.saas.core.domain.constants.SaasConstants;
 import org.example.saas.core.service.order.strategy.IOrderPlaceProvider;
 import org.springframework.beans.BeansException;
@@ -17,9 +17,9 @@ public class OrderPlaceProviderRegistry implements BeanDefinitionRegistryPostPro
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        MultiTenantServiceLoader.register(IOrderPlaceProvider.class);
+        MultientyServiceLoader.register(IOrderPlaceProvider.class);
 
-        Collection<IOrderPlaceProvider> providers = MultiTenantServiceLoader.getInstances(IOrderPlaceProvider.class);
+        Collection<IOrderPlaceProvider> providers = MultientyServiceLoader.getInstances(IOrderPlaceProvider.class);
         for (IOrderPlaceProvider provider : providers) {
             BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(provider.getClass());
             registry.registerBeanDefinition(SaasConstants.ORDER_PLACE_PROVIDER_PREFIX + provider.getType().name(), builder.getBeanDefinition());

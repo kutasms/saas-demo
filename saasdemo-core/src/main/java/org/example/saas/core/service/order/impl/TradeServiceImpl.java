@@ -20,12 +20,12 @@ import org.example.saas.core.parameter.order.TradeDisableParameter;
 import com.github.yulichang.toolkit.MPJWrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import com.chia.multienty.core.domain.constants.MultiTenantConstants;
+import com.chia.multienty.core.domain.constants.MultientyConstants;
 import com.chia.multienty.core.mybatis.MTLambdaWrapper;
 import com.chia.multienty.core.util.ListUtil;
 import com.chia.multienty.core.domain.enums.StatusEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.chia.multienty.core.tools.MultiTenantContext;
+import com.chia.multienty.core.tools.MultientyContext;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.chia.multienty.core.tools.IdWorkerProvider;
 /**
@@ -38,7 +38,7 @@ import com.chia.multienty.core.tools.IdWorkerProvider;
  */
 @Service
 @RequiredArgsConstructor
-@DS(MultiTenantConstants.DS_SHARDING)
+@DS(MultientyConstants.DS_SHARDING)
 public class TradeServiceImpl extends KutaBaseServiceImpl<TradeMapper, Trade> implements TradeService {
 
     private final OrderService orderService;
@@ -97,7 +97,7 @@ public class TradeServiceImpl extends KutaBaseServiceImpl<TradeMapper, Trade> im
         BeanUtils.copyProperties(parameter, trade);
         trade.setTradeId(IdWorkerProvider.next());
         saveTE(trade);
-        trade.setTenantId(MultiTenantContext.getTenant().getTenantId());
+        trade.setTenantId(MultientyContext.getTenant().getTenantId());
         parameter.setTradeId(trade.getTradeId());
     }
 

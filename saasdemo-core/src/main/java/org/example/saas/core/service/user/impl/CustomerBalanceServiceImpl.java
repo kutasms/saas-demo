@@ -18,11 +18,11 @@ import org.example.saas.core.parameter.user.CustomerBalanceDisableParameter;
 import com.github.yulichang.toolkit.MPJWrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import com.chia.multienty.core.domain.constants.MultiTenantConstants;
+import com.chia.multienty.core.domain.constants.MultientyConstants;
 import com.chia.multienty.core.mybatis.MTLambdaWrapper;
 import com.chia.multienty.core.util.ListUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.chia.multienty.core.tools.MultiTenantContext;
+import com.chia.multienty.core.tools.MultientyContext;
 import com.baomidou.dynamic.datasource.annotation.DS;
 
 /**
@@ -35,7 +35,7 @@ import com.baomidou.dynamic.datasource.annotation.DS;
  */
 @Service
 @RequiredArgsConstructor
-@DS(MultiTenantConstants.DS_SHARDING)
+@DS(MultientyConstants.DS_SHARDING)
 public class CustomerBalanceServiceImpl extends KutaBaseServiceImpl<CustomerBalanceMapper, CustomerBalance> implements CustomerBalanceService {
 
 
@@ -80,7 +80,7 @@ public class CustomerBalanceServiceImpl extends KutaBaseServiceImpl<CustomerBala
         CustomerBalance customerBalance = new CustomerBalance();
         BeanUtils.copyProperties(parameter, customerBalance);
         saveTE(customerBalance);
-        customerBalance.setTenantId(MultiTenantContext.getTenant().getTenantId());
+        customerBalance.setTenantId(MultientyContext.getTenant().getTenantId());
         parameter.setCustomerId(customerBalance.getCustomerId());
     }
 

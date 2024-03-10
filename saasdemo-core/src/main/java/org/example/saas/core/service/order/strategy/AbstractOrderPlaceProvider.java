@@ -3,10 +3,10 @@ package org.example.saas.core.service.order.strategy;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 
-import com.chia.multienty.core.domain.constants.MultiTenantConstants;
+import com.chia.multienty.core.domain.constants.MultientyConstants;
 import com.chia.multienty.core.domain.enums.StatusEnum;
 import com.chia.multienty.core.tools.IdWorkerProvider;
-import com.chia.multienty.core.tools.MultiTenantContext;
+import com.chia.multienty.core.tools.MultientyContext;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.shardingsphere.transaction.annotation.ShardingSphereTransactionType;
 import org.apache.shardingsphere.transaction.core.TransactionType;
@@ -39,7 +39,7 @@ public abstract class AbstractOrderPlaceProvider implements IOrderPlaceProvider 
     @GlobalTransactional
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public OrderPlaceResultDTO placeOrder(OrderPlaceParameter parameter) {
-        DynamicDataSourceContextHolder.push(MultiTenantConstants.DS_SHARDING);
+        DynamicDataSourceContextHolder.push(MultientyConstants.DS_SHARDING);
         Trade trade = getCurrentProxy().createTrade(parameter);
         List<OrderDTO> orders = getCurrentProxy().createOrders(parameter, trade);
         OrderPlaceResultDTO result = new OrderPlaceResultDTO()
@@ -54,7 +54,7 @@ public abstract class AbstractOrderPlaceProvider implements IOrderPlaceProvider 
      * @param parameter
      * @return
      */
-    @DS(MultiTenantConstants.DS_SHARDING)
+    @DS(MultientyConstants.DS_SHARDING)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     protected Trade createTrade(OrderPlaceParameter parameter) {
         Trade trade = new Trade();
@@ -62,7 +62,7 @@ public abstract class AbstractOrderPlaceProvider implements IOrderPlaceProvider 
         trade.setPaid(false);
         trade.setStatus(StatusEnum.NORMAL.getCode());
         trade.setCustomerId(CustomerContext.getCustomer().getCustomerId());
-        trade.setTenantId(MultiTenantContext.getTenant().getTenantId());
+        trade.setTenantId(MultientyContext.getTenant().getTenantId());
         trade.setCreateTime(LocalDateTime.now());
         tradeService.saveTE(trade);
         return trade;

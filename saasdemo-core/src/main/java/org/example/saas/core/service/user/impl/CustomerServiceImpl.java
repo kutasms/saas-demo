@@ -12,12 +12,12 @@ import org.example.saas.core.domain.dto.CustomerDTO;
 import com.github.yulichang.toolkit.MPJWrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import com.chia.multienty.core.domain.constants.MultiTenantConstants;
+import com.chia.multienty.core.domain.constants.MultientyConstants;
 import com.chia.multienty.core.mybatis.MTLambdaWrapper;
 import com.chia.multienty.core.util.ListUtil;
 import com.chia.multienty.core.domain.enums.StatusEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.chia.multienty.core.tools.MultiTenantContext;
+import com.chia.multienty.core.tools.MultientyContext;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.chia.multienty.core.tools.IdWorkerProvider;
 import org.springframework.transaction.annotation.Propagation;
@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @RequiredArgsConstructor
-@DS(MultiTenantConstants.DS_SHARDING)
+@DS(MultientyConstants.DS_SHARDING)
 public class CustomerServiceImpl extends KutaBaseServiceImpl<CustomerMapper, Customer> implements CustomerService {
 
 
@@ -58,7 +58,6 @@ public class CustomerServiceImpl extends KutaBaseServiceImpl<CustomerMapper, Cus
                 .set(Customer::getGrowth, growth)
                 .eq(Customer::getTenantId, parameter.getTenantId())
                 .eq(Customer::getCustomerId, parameter.getCustomerId()));
-        throw new RuntimeException();
     }
 
     @Override
@@ -96,7 +95,7 @@ public class CustomerServiceImpl extends KutaBaseServiceImpl<CustomerMapper, Cus
         customer.setCustomerId(IdWorkerProvider.next());
 
         saveTE(customer);
-        customer.setTenantId(MultiTenantContext.getTenant().getTenantId());
+        customer.setTenantId(MultientyContext.getTenant().getTenantId());
         parameter.setCustomerId(customer.getCustomerId());
     }
 

@@ -35,21 +35,21 @@ public class TradeController {
 
     private final OrderPlaceStrategy placeStrategy;
 
-    @PostMapping("/detail")
+    @PostMapping("detail")
     @ApiOperation("获取交易详情")
     public Result<TradeDTO> getDetail(@Validated @RequestBody TradeDetailGetParameter parameter) {
         TradeDTO detail = tradeService.getDetail(parameter);
         return new Result<>(detail);
     }
 
-    @PostMapping("/page")
+    @PostMapping("page")
     @ApiOperation("获取交易分页列表")
     public Result<IPage<TradeDTO>> getPage(@Validated @RequestBody TradePageGetParameter parameter) {
         IPage<TradeDTO> page = tradeService.getPage(parameter);
         return new Result<>(page);
     }
 
-    @PostMapping("/update")
+    @PostMapping("update")
     @ApiOperation("更新交易")
     @WebLog
     public Result<Boolean> update(@Validated @RequestBody TradeUpdateParameter parameter) {
@@ -57,7 +57,7 @@ public class TradeController {
         return new Result<>(true);
     }
 
-    @PostMapping("/save")
+    @PostMapping("save")
     @ApiOperation("保存交易")
     @WebLog
     public Result<Boolean> save(@Validated @RequestBody TradeSaveParameter parameter) {
@@ -65,7 +65,7 @@ public class TradeController {
         return new Result<>(true);
     }
 
-    @PostMapping("/enable")
+    @PostMapping("enable")
     @ApiOperation("启用交易")
     @WebLog
     public Result<Boolean> enable(@Validated @RequestBody TradeEnableParameter parameter) {
@@ -73,7 +73,7 @@ public class TradeController {
         return new Result<>(true);
     }
 
-    @PostMapping("/disable")
+    @PostMapping("disable")
     @ApiOperation("禁用交易")
     @WebLog
     public Result<Boolean> save(@Validated @RequestBody TradeDisableParameter parameter) {
@@ -81,7 +81,7 @@ public class TradeController {
         return new Result<>(true);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("delete")
     @ApiOperation("删除交易")
     @WebLog
     public Result<Boolean> delete(@Validated @RequestBody TradeDeleteParameter parameter) {
@@ -89,7 +89,7 @@ public class TradeController {
         return new Result<>(true);
     }
 
-    @PostMapping("/place-order")
+    @PostMapping("place-order")
     @ApiOperation("下单")
     @WebLog
     public Result<OrderPlaceResultDTO> placeOrder(@Validated @RequestBody OrderPlaceParameter parameter) {

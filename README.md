@@ -38,6 +38,8 @@ Multienty集成了多个优秀的中间件，为您提供一站式多租户SAAS�
 
 [SaaS平台开发实战(七)：链表查询和分布式事务](https://zhuanlan.zhihu.com/p/684278490)
 
+[SaaS平台开发实战(八)：multienty-Admin服务状态监听](https://blog.csdn.net/baiyinianhua/article/details/136412971)
+
 
 ## 更多特性
 如您想了解更多特性，可咨询本项目作者或自行阅读源代码

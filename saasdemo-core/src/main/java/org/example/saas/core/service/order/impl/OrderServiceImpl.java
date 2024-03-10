@@ -22,12 +22,12 @@ import org.example.saas.core.parameter.order.OrderDisableParameter;
 import com.github.yulichang.toolkit.MPJWrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import com.chia.multienty.core.domain.constants.MultiTenantConstants;
+import com.chia.multienty.core.domain.constants.MultientyConstants;
 import com.chia.multienty.core.mybatis.MTLambdaWrapper;
 import com.chia.multienty.core.util.ListUtil;
 import com.chia.multienty.core.domain.enums.StatusEnum;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.chia.multienty.core.tools.MultiTenantContext;
+import com.chia.multienty.core.tools.MultientyContext;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.chia.multienty.core.tools.IdWorkerProvider;
 
@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-@DS(MultiTenantConstants.DS_SHARDING)
+@DS(MultientyConstants.DS_SHARDING)
 public class OrderServiceImpl extends KutaBaseServiceImpl<OrderMapper, Order> implements OrderService {
     private final OrderItemService orderItemService;
 
@@ -125,7 +125,7 @@ public class OrderServiceImpl extends KutaBaseServiceImpl<OrderMapper, Order> im
         BeanUtils.copyProperties(parameter, order);
         order.setOrderId(IdWorkerProvider.next());
         saveTE(order);
-        order.setTenantId(MultiTenantContext.getTenant().getTenantId());
+        order.setTenantId(MultientyContext.getTenant().getTenantId());
         parameter.setOrderId(order.getOrderId());
     }
 

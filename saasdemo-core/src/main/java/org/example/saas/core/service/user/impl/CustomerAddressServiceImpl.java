@@ -18,11 +18,11 @@ import org.example.saas.core.parameter.user.CustomerAddressDisableParameter;
 import com.github.yulichang.toolkit.MPJWrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import com.chia.multienty.core.domain.constants.MultiTenantConstants;
+import com.chia.multienty.core.domain.constants.MultientyConstants;
 import com.chia.multienty.core.mybatis.MTLambdaWrapper;
 import com.chia.multienty.core.util.ListUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.chia.multienty.core.tools.MultiTenantContext;
+import com.chia.multienty.core.tools.MultientyContext;
 import com.baomidou.dynamic.datasource.annotation.DS;
 
 /**
@@ -35,7 +35,7 @@ import com.baomidou.dynamic.datasource.annotation.DS;
  */
 @Service
 @RequiredArgsConstructor
-@DS(MultiTenantConstants.DS_SHARDING)
+@DS(MultientyConstants.DS_SHARDING)
 public class CustomerAddressServiceImpl extends KutaBaseServiceImpl<CustomerAddressMapper, CustomerAddress> implements CustomerAddressService {
 
 
@@ -80,7 +80,7 @@ public class CustomerAddressServiceImpl extends KutaBaseServiceImpl<CustomerAddr
         CustomerAddress customerAddress = new CustomerAddress();
         BeanUtils.copyProperties(parameter, customerAddress);
         saveTE(customerAddress);
-        customerAddress.setTenantId(MultiTenantContext.getTenant().getTenantId());
+        customerAddress.setTenantId(MultientyContext.getTenant().getTenantId());
         parameter.setAddressId(customerAddress.getAddressId());
     }
 

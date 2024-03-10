@@ -3,7 +3,7 @@ package org.example.saas.core.service.order.strategy;
 import com.chia.multienty.core.domain.basic.KeyValuePair;
 import com.chia.multienty.core.domain.enums.StatusEnum;
 import com.chia.multienty.core.tools.IdWorkerProvider;
-import com.chia.multienty.core.tools.MultiTenantContext;
+import com.chia.multienty.core.tools.MultientyContext;
 import org.example.saas.core.domain.dto.OrderDTO;
 import org.example.saas.core.domain.dto.ProductDTO;
 import org.example.saas.core.domain.dto.ProductSkuDTO;
@@ -174,7 +174,7 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
         product1.setMainImageUrl("https://image.baidu.com/?t=12847912");
         product1.setSketch("商品1Sketch");
         product1.setSubtitle("sub title");
-        product1.setTenantId(MultiTenantContext.getTenant().getTenantId());
+        product1.setTenantId(MultientyContext.getTenant().getTenantId());
         product1.setVersion(1L);
         products.add(product1);
         return products;
@@ -195,7 +195,7 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
             sku.setOriginalPrice(BigDecimal.valueOf(16.5));
             sku.setProductId(productId);
             sku.setStock(500);
-            sku.setTenantId(MultiTenantContext.getTenant().getTenantId());
+            sku.setTenantId(MultientyContext.getTenant().getTenantId());
             sku.setImageUrl("https://image.baidu.com?t=281643");
             sku.setVersion(1L);
         } else {
@@ -210,7 +210,7 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
             sku.setOriginalPrice(BigDecimal.valueOf(26.5));
             sku.setProductId(productId);
             sku.setStock(300);
-            sku.setTenantId(MultiTenantContext.getTenant().getTenantId());
+            sku.setTenantId(MultientyContext.getTenant().getTenantId());
             sku.setImageUrl("https://image.baidu.com?t=153917B2382");
             sku.setVersion(2L);
         }
@@ -230,7 +230,7 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
             attribute.setCodeName("attr_1");
             attribute.setCodeValue("attr_v_0");
             attribute.setSkuId(skuId);
-            attribute.setTenantId(MultiTenantContext.getTenant().getTenantId());
+            attribute.setTenantId(MultientyContext.getTenant().getTenantId());
             attributes.add(attribute);
             SkuAttribute attribute2 = new SkuAttribute();
             attribute2.setName("尺码");
@@ -241,7 +241,7 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
             attribute2.setCodeName("attr_2");
             attribute2.setCodeValue("attr_v_1");
             attribute2.setSkuId(skuId);
-            attribute2.setTenantId(MultiTenantContext.getTenant().getTenantId());
+            attribute2.setTenantId(MultientyContext.getTenant().getTenantId());
             attributes.add(attribute2);
         } else {
             SkuAttribute attribute = new SkuAttribute();
@@ -253,7 +253,7 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
             attribute.setCodeName("attr_1");
             attribute.setCodeValue("attr_v_0");
             attribute.setSkuId(skuId);
-            attribute.setTenantId(MultiTenantContext.getTenant().getTenantId());
+            attribute.setTenantId(MultientyContext.getTenant().getTenantId());
             attributes.add(attribute);
             SkuAttribute attribute2 = new SkuAttribute();
             attribute2.setName("尺码");
@@ -264,7 +264,7 @@ public class NormalOrderPlaceProvider extends AbstractOrderPlaceProvider{
             attribute2.setCodeName("attr_2");
             attribute2.setCodeValue("attr_v_1");
             attribute2.setSkuId(skuId);
-            attribute2.setTenantId(MultiTenantContext.getTenant().getTenantId());
+            attribute2.setTenantId(MultientyContext.getTenant().getTenantId());
             attributes.add(attribute2);
         }
         return attributes;

@@ -18,11 +18,11 @@ import org.example.saas.core.parameter.user.CustomerWxDisableParameter;
 import com.github.yulichang.toolkit.MPJWrappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import com.chia.multienty.core.domain.constants.MultiTenantConstants;
+import com.chia.multienty.core.domain.constants.MultientyConstants;
 import com.chia.multienty.core.mybatis.MTLambdaWrapper;
 import com.chia.multienty.core.util.ListUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.chia.multienty.core.tools.MultiTenantContext;
+import com.chia.multienty.core.tools.MultientyContext;
 import com.baomidou.dynamic.datasource.annotation.DS;
 
 /**
@@ -35,7 +35,7 @@ import com.baomidou.dynamic.datasource.annotation.DS;
  */
 @Service
 @RequiredArgsConstructor
-@DS(MultiTenantConstants.DS_SHARDING)
+@DS(MultientyConstants.DS_SHARDING)
 public class CustomerWxServiceImpl extends KutaBaseServiceImpl<CustomerWxMapper, CustomerWx> implements CustomerWxService {
 
 
@@ -80,7 +80,7 @@ public class CustomerWxServiceImpl extends KutaBaseServiceImpl<CustomerWxMapper,
         CustomerWx customerWx = new CustomerWx();
         BeanUtils.copyProperties(parameter, customerWx);
         saveTE(customerWx);
-        customerWx.setTenantId(MultiTenantContext.getTenant().getTenantId());
+        customerWx.setTenantId(MultientyContext.getTenant().getTenantId());
         parameter.setCustomerId(customerWx.getCustomerId());
     }
 

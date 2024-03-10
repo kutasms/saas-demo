@@ -1,8 +1,8 @@
 package org.example.saas.core.interceptor;
 
 import com.chia.multienty.core.domain.basic.Result;
-import com.chia.multienty.core.domain.constants.MultiTenantHeaderConstants;
-import com.chia.multienty.core.properties.yaml.YamlMultiTenantProperties;
+import com.chia.multienty.core.domain.constants.MultientyHeaderConstants;
+import com.chia.multienty.core.properties.yaml.YamlMultientyProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.example.saas.core.domain.constants.SaasConstants;
@@ -24,9 +24,9 @@ public class SaasInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        response.setHeader("Content-Type", "json/application; charset=utf-8");
+//        response.setHeader("Content-Type", "json/application; charset=utf-8");
         Result result = null;
-        String strTenantId = request.getHeader(MultiTenantHeaderConstants.TENANT_ID_KEY);
+        String strTenantId = request.getHeader(MultientyHeaderConstants.TENANT_ID_KEY);
         Long tenantId = Long.parseLong(strTenantId);
         String mockCustomerId = request.getHeader(SaasConstants.MOCK_CUSTOMER_ID);
 
